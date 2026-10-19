@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { API_BASE } from '../config.js';
 
 /**
  * UploadBox — drag-and-drop or click to select a .txt or .pdf file, then upload.
@@ -45,7 +46,7 @@ export default function UploadBox({ onSuccess }) {
     form.append('file', file);
 
     try {
-      const res  = await fetch('/api/documents', { method: 'POST', body: form });
+      const res  = await fetch(`${API_BASE}/api/documents`, { method: 'POST', body: form });
       const data = await res.json();
 
       if (!res.ok) {

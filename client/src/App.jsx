@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE } from './config.js';
 import UploadBox  from './components/UploadBox.jsx';
 import AskForm    from './components/AskForm.jsx';
 import AnswerCard from './components/AnswerCard.jsx';
@@ -26,7 +27,7 @@ export default function App() {
     setAskError(null);
 
     try {
-      const res  = await fetch('/api/ask', {
+      const res  = await fetch(`${API_BASE}/api/ask`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ documentId, question }),
