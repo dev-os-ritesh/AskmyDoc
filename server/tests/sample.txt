@@ -1,0 +1,35 @@
+NovaTech AI Platform: Comprehensive Technical and Business Overview
+
+COMPANY BACKGROUND
+
+NovaTech Inc. was founded in 2019 by CEO Marcus Webb and CTO Dr. Sarah Chen. The company is headquartered in Austin, Texas, and specializes in enterprise artificial intelligence solutions for the healthcare and financial services sectors. As of December 2023, NovaTech employs 340 full-time staff, including 120 engineers and 45 research scientists.
+
+FLAGSHIP PRODUCT
+
+NovaTech's flagship product, the NovaPlatform, was officially launched in Q3 2021 after two years of internal development. The platform processes over 2 million documents per day and has been deployed in more than 150 hospitals and 60 financial institutions across North America. As of 2023, NovaPlatform has a customer retention rate of 97%.
+
+TECHNOLOGY
+
+At the core of the NovaPlatform is a proprietary neural architecture called TransferNet, developed entirely by NovaTech's research team under the leadership of Dr. Sarah Chen. TransferNet achieves 94.7% accuracy on standard medical document classification benchmarks and 91.2% accuracy on financial regulatory compliance tasks. The model was trained on a dataset of 50 million anonymized documents and uses a transformer-based architecture with 1.2 billion parameters.
+
+The NovaPlatform is deployed on AWS infrastructure across three regions: us-east-1, us-west-2, and eu-central-1. The system is built on a microservices architecture using Kubernetes for orchestration. The platform supports REST and GraphQL APIs.
+
+FUNDING AND FINANCIALS
+
+NovaTech raised $12 million in its Series A round in September 2020, led by SeedStone Ventures. In March 2022, the company closed a Series B round of $85 million, led by Horizon Capital with participation from TechFund Partners and Global AI Ventures. The company has not yet disclosed plans for an IPO.
+
+PRICING
+
+The NovaPlatform is offered under three subscription tiers. The Enterprise plan costs $12,000 per month and includes unlimited document processing, dedicated support, and custom model fine-tuning. The Business plan costs $3,500 per month and supports up to 500,000 documents per month with standard support. The Starter plan costs $800 per month for up to 50,000 documents per month, with email support only. All plans include a 99.9% uptime SLA and SOC 2 Type II certification.
+
+COMPLIANCE AND SECURITY
+
+The NovaPlatform is HIPAA-compliant, SOC 2 Type II certified, and GDPR-ready. All data is encrypted at rest using AES-256 and in transit using TLS 1.3. Customer data is never used to train or fine-tune NovaTech's models without explicit written consent. Data retention policies are configurable per customer.
+
+RECENT DEVELOPMENTS
+
+In January 2024, NovaTech announced a partnership with MediGroup, the largest hospital network in the United States, covering 420 hospitals. The partnership is valued at $200 million over five years. NovaTech also announced plans to expand into the European market in Q2 2024, starting with Germany and France.
+
+CUSTOMER SUPPORT
+
+NovaTech offers 24/7 customer support through phone, email, and live chat for all paid plans. Enterprise clients are assigned a dedicated customer success manager. Average response time for critical issues is under 15 minutes. The company maintains a public status page at status.novatech.ai.
