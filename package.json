@@ -1,0 +1,12 @@
+{
+  "name": "askmydoc",
+  "version": "1.0.0",
+  "description": "AskMyDoc — AI Document Q&A (monorepo root)",
+  "type": "module",
+  "scripts": {
+    "vercel-build": "cd client && npm run build"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

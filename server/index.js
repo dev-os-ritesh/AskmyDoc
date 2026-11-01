@@ -9,7 +9,8 @@ const app  = express();
 const PORT = process.env.PORT || 5000;
 
 // ── CORS ─────────────────────────────────────────────────────────────────
-// Allow the deployed client URL (set CLIENT_URL on Vercel) + localhost dev
+// On Vercel: CLIENT_URL = your deployed Vercel frontend URL
+// On local:  http://localhost:5173
 const allowedOrigins = [
   'http://localhost:5173',
   process.env.CLIENT_URL,
@@ -17,35 +18,75 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (e.g. curl, Postman)
+    // Allow requests with no origin (curl, Postman, same-origin in prod)
     if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
     cb(new Error(`CORS: origin ${origin} not allowed`));
   },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
+
+// Handle pre-flight OPTIONS requests
+app.options('*', cors());
 
 app.use(express.json());
 
 // ── Routes ────────────────────────────────────────────────────────────────
 app.use('/api/documents', documentsRouter);
 app.use('/api/ask',       askRouter);
-app.get('/api/health',   (_req, res) => res.json({ status: 'ok' }));
+app.get('/api/health',   (_req, res) => res.json({ status: 'ok', env: process.env.NODE_ENV }));
 
-// ── Database + server startup ─────────────────────────────────────────────
-mongoose.connect(process.env.MONGODB_URI).catch((err) => {
-  console.error('❌ MongoDB connection failed:', err.message);
+// ── MongoDB connection (cached for serverless cold starts) ─────────────────
+// On serverless each invocation may reuse an existing connection.
+// We use a module-level promise so mongoose only connects once per container.
+let mongoConnectPromise = null;
+
+function connectMongo() {
+  if (mongoose.connection.readyState === 1) {
+    // Already connected — reuse the connection
+    return Promise.resolve();
+  }
+  if (!mongoConnectPromise) {
+    mongoConnectPromise = mongoose
+      .connect(process.env.MONGODB_URI, {
+        serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+      })
+      .then(() => {
+        console.log('✅ Connected to MongoDB');
+        mongoConnectPromise = null; // allow reconnect if needed later
+      })
+      .catch((err) => {
+        console.error('❌ MongoDB connection failed:', err.message);
+        mongoConnectPromise = null;
+        throw err;
+      });
+  }
+  return mongoConnectPromise;
+}
+
+// Middleware to ensure DB is connected before any API route runs
+app.use('/api', async (_req, res, next) => {
+  try {
+    await connectMongo();
+    next();
+  } catch (err) {
+    res.status(503).json({ error: 'Database unavailable. Please try again shortly.' });
+  }
 });
 
+// ── Local dev server ───────────────────────────────────────────────────────
 // On Vercel (serverless) we export the app — listen() is NOT called.
-// Locally (npm run dev) we call listen() after Mongoose connects.
 if (!process.env.VERCEL) {
-  mongoose.connection.once('open', () => {
-    console.log('✅ Connected to MongoDB');
+  connectMongo().then(() => {
     app.listen(PORT, () =>
       console.log(`🚀 Server running on http://localhost:${PORT}`)
     );
+  }).catch((err) => {
+    console.error('Failed to start server:', err.message);
+    process.exit(1);
   });
-} else {
-  mongoose.connection.once('open', () => console.log('✅ Connected to MongoDB'));
 }
 
 // Required export for Vercel serverless
