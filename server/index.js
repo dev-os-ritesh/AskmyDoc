@@ -8,26 +8,22 @@ import askRouter       from './routes/ask.js';
 const app  = express();
 const PORT = process.env.PORT || 5000;
 
-// ── CORS ─────────────────────────────────────────────────────────────────
-// On Vercel: CLIENT_URL = your deployed Vercel frontend URL
-// On local:  http://localhost:5173
 const allowedOrigins = [
   'http://localhost:5173',
+  'https://askmy-doc-eqbd.vercel.app',
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (curl, Postman, same-origin in prod)
     if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origin ${origin} not allowed`));
+    return cb(new Error(`CORS: origin ${origin} not allowed`));
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 
-// Handle pre-flight OPTIONS requests
 app.options('*', cors());
 
 app.use(express.json());
